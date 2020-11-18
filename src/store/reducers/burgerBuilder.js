@@ -1,3 +1,4 @@
+import { updateObject } from '../utility';
 import {
   ADD_INGREDIENT,
   FETCH_INGREDIENTS_FAILED,
@@ -23,51 +24,58 @@ const INGREDIENT_PRICES = {
   meat: 0.7,
 };
 
+const addIngredient = (state, { ingredientName }) => {
+  const updatedIngredient = { [ingredientName]: state.ingredients[ingredientName] + 1 };
+
+  const updatedIngredients = updateObject(state.ingredients, updatedIngredient);
+
+  const updatedState = {
+    ingredients: updatedIngredients,
+
+    totalPrice: state.totalPrice + INGREDIENT_PRICES[ingredientName],
+  };
+
+  return updateObject(state, updatedState);
+};
+
+const removeIngredient = (state, { ingredientName }) => {
+  const removedIngredient = { [ingredientName]: state.ingredients[ingredientName] - 1 };
+
+  const removedIngredients = updateObject(state.ingredients, removedIngredient);
+
+  const updatedSt = {
+    ingredients: removedIngredients,
+
+    totalPrice: state.totalPrice - INGREDIENT_PRICES[ingredientName],
+  };
+
+  return updateObject(state, updatedSt);
+};
+
+const setIngredients = (state, { ingredients }) =>
+  updateObject(state, {
+    ingredients: ingredients,
+
+    totalPrice: 4,
+
+    error: false,
+  });
+
+const fetchIngredientsFailed = (state) => updateObject(state, { error: true });
+
 const reducer = (state = initialState, { type, ingredientName, ingredients }) => {
   switch (type) {
     case ADD_INGREDIENT:
-      return {
-        ...state,
-
-        ingredients: {
-          ...state.ingredients,
-
-          [ingredientName]: state.ingredients[ingredientName] + 1,
-        },
-
-        totalPrice: state.totalPrice + INGREDIENT_PRICES[ingredientName],
-      };
+      return addIngredient(state, { ingredientName });
 
     case REMOVE_INGREDIENT:
-      return {
-        ...state,
-
-        ingredients: {
-          ...state.ingredients,
-
-          [ingredientName]: state.ingredients[ingredientName] - 1,
-        },
-
-        totalPrice: state.totalPrice - INGREDIENT_PRICES[ingredientName],
-      };
+      return removeIngredient(state, { ingredientName });
 
     case SET_INGREDIENTS:
-      return {
-        ...state,
-
-        ingredients: ingredients,
-
-        totalPrice: 4,
-
-        error: false,
-      };
+      return setIngredients(state, { ingredients });
 
     case FETCH_INGREDIENTS_FAILED:
-      return {
-        ...state,
-
-        error: true,
-      };
+      return fetchIngredientsFailed(state);
 
     default:
       return state;
