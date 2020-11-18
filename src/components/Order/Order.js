@@ -1,6 +1,6 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import classes from './Order.css';
+import React from 'react';
 
 const Order = (props) => {
   const ingredients = [];
@@ -14,7 +14,7 @@ const Order = (props) => {
   }
 
   const ingredientOutput = ingredients.map((ingredient) => (
-    <span key={ingredient} className={classes.Span}>
+    <span key={ingredient.name} className={classes.Span}>
       {ingredient.name} ({ingredient.amount})
     </span>
   ));
@@ -31,7 +31,7 @@ const Order = (props) => {
 };
 
 Order.propTypes = {
-  price: PropTypes.string.isRequired,
+  price: PropTypes.number.isRequired,
 };
 
 export default Order;
