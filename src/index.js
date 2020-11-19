@@ -3,6 +3,7 @@ import burgerBuilderReducer from './store/reducers/burgerBuilder';
 import registerServiceWorker from './registerServiceWorker';
 import orderReducer from './store/reducers/order';
 import { BrowserRouter } from 'react-router-dom';
+import authReducer from './store/reducers/auth';
 import { Provider } from 'react-redux';
 import ReactDOM from 'react-dom';
 import thunk from 'redux-thunk';
@@ -16,6 +17,8 @@ const rootReducer = combineReducers({
   burgerBuilder: burgerBuilderReducer,
 
   order: orderReducer,
+
+  auth: authReducer,
 });
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));

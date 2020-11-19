@@ -12,6 +12,8 @@ const initialState = {
   totalPrice: 4,
 
   error: false,
+
+  building: false,
 };
 
 const INGREDIENT_PRICES = {
@@ -33,6 +35,8 @@ const addIngredient = (state, { ingredientName }) => {
     ingredients: updatedIngredients,
 
     totalPrice: state.totalPrice + INGREDIENT_PRICES[ingredientName],
+
+    building: true,
   };
 
   return updateObject(state, updatedState);
@@ -59,6 +63,8 @@ const setIngredients = (state, { ingredients }) =>
     totalPrice: 4,
 
     error: false,
+
+    building: false,
   });
 
 const fetchIngredientsFailed = (state) => updateObject(state, { error: true });

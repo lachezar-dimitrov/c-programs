@@ -1,10 +1,10 @@
-import React from 'react';
+import NavigationItems from '../NavigationItems/NavigationItems';
+import Backdrop from '../../UI/Backdrop/Backdrop';
+import classes from './SideDrawer.css';
+import Aux from '../../../hoc/Aux/Aux';
 import PropTypes from 'prop-types';
 import Logo from '../../Logo/Logo';
-import NavigationItems from '../NavigationItems/NavigationItems';
-import classes from './SideDrawer.css';
-import Backdrop from '../../UI/Backdrop/Backdrop';
-import Aux from '../../../hoc/Aux/Aux';
+import React from 'react';
 
 const SideDrawer = (props) => {
   const attachedClasses = [classes.SideDrawer, classes.Close];
@@ -21,7 +21,7 @@ const SideDrawer = (props) => {
         </div>
 
         <nav>
-          <NavigationItems />
+          <NavigationItems isAuthenticated={props.isAuth} />
         </nav>
       </div>
     </Aux>
@@ -29,7 +29,10 @@ const SideDrawer = (props) => {
 };
 
 SideDrawer.propTypes = {
+  isAuth: PropTypes.bool,
+
   open: PropTypes.bool,
+
   closed: PropTypes.func,
 };
 
