@@ -1,4 +1,5 @@
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
+import { updateObject, checkValidity } from '../../../shared/utility';
 import { purchaseBurger } from '../../../store/actions/index';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Button from '../../../components/UI/Button/Button';
@@ -33,7 +34,7 @@ class ContactData extends Component {
     };
   }
   state = {
-    orderFrom: {
+    orderForm: {
       name: this.formConfigure('Your name'),
 
       street: this.formConfigure('Street'),
@@ -72,8 +73,8 @@ class ContactData extends Component {
 
     const formData = {};
 
-    for (const formElementIdentifier in this.state.orderFrom) {
-      formData[formElementIdentifier] = this.state.orderFrom[formElementIdentifier].value;
+    for (const formElementIdentifier in this.state.orderForm) {
+      formData[formElementIdentifier] = this.state.orderForm[formElementIdentifier].value;
     }
 
     const order = {
@@ -89,40 +90,22 @@ class ContactData extends Component {
     this.props.onOrderBurger(order, this.props.idToken);
   };
 
-  checkValidity(value, rules) {
-    if (!rules) return true;
-
-    let isValid = true;
-
-    if (rules.required) isValid = value.trim() !== '' && isValid;
-
-    if (rules.minLength) isValid = value.length >= rules.minLength && isValid;
-
-    if (rules.maxLength) isValid = value.length <= rules.maxLength && isValid;
-
-    return isValid;
-  }
-
   inputChangedHandler = (event, inputIdentifier) => {
-    const updatedOrderForm = {
-      ...this.state.orderFrom,
-    };
+    const updatedFormElement = updateObject(this.state.orderForm[inputIdentifier], {
+      value: event.target.value,
 
-    const updatedFormElement = {
-      ...updatedOrderForm[inputIdentifier],
-    };
+      valid: checkValidity(
+        event.target.value,
 
-    updatedFormElement.value = event.target.value;
+        this.state.orderForm[inputIdentifier].validation
+      ),
 
-    updatedFormElement.valid = this.checkValidity(
-      updatedFormElement.value,
+      touched: true,
+    });
 
-      updatedFormElement.validation
-    );
-
-    updatedFormElement.touched = true;
-
-    updatedOrderForm[inputIdentifier] = updatedFormElement;
+    const updatedOrderForm = updateObject(this.state.orderForm, {
+      [inputIdentifier]: updatedFormElement,
+    });
 
     let formIsValid = true;
 
@@ -130,17 +113,17 @@ class ContactData extends Component {
       formIsValid = updatedOrderForm[inputIdentifier].valid && formIsValid;
     }
 
-    this.setState({ orderFrom: updatedOrderForm, formIsValid });
+    this.setState({ orderForm: updatedOrderForm, formIsValid });
   };
 
   render() {
     const formElementsArray = [];
 
-    for (const key in this.state.orderFrom) {
+    for (const key in this.state.orderForm) {
       formElementsArray.push({
         id: key,
 
-        config: this.state.orderFrom[key],
+        config: this.state.orderForm[key],
       });
     }
 

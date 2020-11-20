@@ -1,3 +1,4 @@
+import { updateObject } from '../../shared/utility';
 import {
   AUTH_START,
   AUTH_SUCCESS,
@@ -5,7 +6,6 @@ import {
   AUTH_LOGOUT,
   SET_AUTH_REDIRECT_PATH,
 } from '../actions/actionTypes';
-import { updateObject } from '../utility';
 
 const initialState = {
   idToken: null,

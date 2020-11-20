@@ -1,4 +1,4 @@
-import { updateObject } from '../utility';
+import { updateObject } from '../../shared/utility';
 import {
   PURCHASE_BURGER_SUCCESS,
   PURCHASE_BURGER_FAIL,
