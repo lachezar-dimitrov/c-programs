@@ -1,7 +1,8 @@
+import { updateObject, checkValidity } from '../../shared/utility.js';
+import { auth, setAuthRedirectPath } from '../../store/actions/index';
 import Spinner from '../../components/UI/Spinner/Spinner.js';
 import Button from '../../components/UI/Button/Button';
 import Input from '../../components/UI/Input/Input';
-import { auth, setAuthRedirectPath } from '../../store/actions/index';
 import { Redirect } from 'react-router-dom';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -62,38 +63,16 @@ class Auth extends Component {
       this.props.onSetAuthRedirectPath();
   }
 
-  checkValidity(value, rules) {
-    if (!rules) return true;
-
-    let isValid = true;
-
-    if (rules.required) isValid = value.trim() !== '' && isValid;
-
-    if (rules.minLength) isValid = value.length >= rules.minLength && isValid;
-
-    if (rules.maxLength) isValid = value.length <= rules.maxLength && isValid;
-
-    return isValid;
-  }
-
   inputChangedHandler = (event, controlName) => {
-    const value = event.target.value;
+    const updatedControls = updateObject(this.state.controls, {
+      [controlName]: updateObject(this.state.controls[controlName], {
+        value: event.target.value,
 
-    const rules = this.state.controls[controlName].validation;
-
-    const updatedControls = {
-      ...this.state.controls,
-
-      [controlName]: {
-        ...this.state.controls[controlName],
-
-        value,
-
-        valid: this.checkValidity(value, rules),
+        valid: checkValidity(event.target.value, this.state.controls[controlName].validation),
 
         touched: true,
-      },
-    };
+      }),
+    });
 
     this.setState({ controls: updatedControls });
   };
