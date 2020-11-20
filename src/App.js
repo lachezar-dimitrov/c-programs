@@ -13,7 +13,7 @@ const asyncOrders = asyncComponent(() => import('./containers/Orders.js/Orders')
 
 const asyncAuth = asyncComponent(() => import('./containers/Auth/Auth'));
 
-class App extends Component {
+export class App extends Component {
   componentDidMount = () => this.props.onTryAutoSignup();
 
   render() {
